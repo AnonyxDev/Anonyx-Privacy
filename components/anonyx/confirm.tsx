@@ -1,0 +1,3 @@
+'use client';
+import {AlertDialog,AlertDialogContent,AlertDialogTitle,AlertDialogDescription,AlertDialogFooter,AlertDialogCancel,AlertDialogAction,AlertDialogTrigger} from '@/components/ui/alert-dialog';
+export function Confirm({children,title,description,onConfirm}:{children:React.ReactNode;title:string;description:string;onConfirm:()=>void}){return <AlertDialog><AlertDialogTrigger asChild>{children}</AlertDialogTrigger><AlertDialogContent><AlertDialogTitle>{title}</AlertDialogTitle><AlertDialogDescription>{description}</AlertDialogDescription><AlertDialogFooter><AlertDialogCancel>Cancel</AlertDialogCancel><AlertDialogAction onClick={onConfirm}>Confirm</AlertDialogAction></AlertDialogFooter></AlertDialogContent></AlertDialog>}

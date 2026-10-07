@@ -1,0 +1,2 @@
+import Link from 'next/link';
+export default function NotFound(){return <div className="page-wrap"><header className="page-intro"><div className="eyebrow">404 / OUTSIDE THE APERTURE</div><h1>This page isn’t here.</h1><p>Return to Anonyx or open the workspace to keep exploring.</p><div className="button-row mt"><Link href="/" className="button secondary">Home</Link><Link href="/workspace" className="button primary">Launch Workspace</Link></div></header></div>}

@@ -1,0 +1,35 @@
+'use client';
+import {useState} from 'react';
+import {Monitor,Eye,Layers3,ScanLine,Undo2} from 'lucide-react';
+import {DataBoundaries} from '@/components/anonyx/data-boundaries';
+import {PageIntro} from '@/components/anonyx/shared';
+import {maskIdentifiers} from '@/lib/workspace';
+
+const steps=[
+  ['01','Start on your device','Write and edit your prompt locally. Anonyx does not upload your draft or context library while you prepare a request.'],
+  ['02','Choose the useful details','Context and conversation history start unselected. Add only what this request needs. Your connected wallet address is never automatically added to AI request text.'],
+  ['03','Review, then approve','Read the exact prompt, context, and history in your sharing summary. Send stays unavailable until you approve it. Changing the request resets your approval.'],
+  ['04','Clear your session','End Session clears your draft, transcript, and request selections. Manage context separately in the Context tab; delete saved items whenever you choose.'],
+];
+const questions=[
+  ['Can the AI see my entire context library?','Anonyx includes only the context items you select for that request. Unselected items and unselected conversation turns are left out. Anything you type into the prompt itself is included, so review that text too.'],
+  ['Can a model provider read what I send?','Yes. When you connect an external provider and send a request, that provider processes the approved text. Its retention, training, and data-use terms apply. Anonyx does not currently guarantee provider non-retention, confidential inference, or anonymous access.'],
+  ['Is my context saved automatically?','No. Your library is held in memory by default. Remember context on this device is an explicit choice. Saved browser storage is not encrypted, so use it only on a device and browser profile you trust. There is no Anonyx cloud sync.'],
+  ['What happens when I visit the website?','The hosting service receives network information needed to deliver the website, including your IP address and request metadata. Anonyx does not add advertising trackers, product analytics, or prompt logging. Optional wallet and provider services have their own data practices.'],
+  ['Does End Session delete everything everywhere?','It clears Anonyx’s local session state. Saved context needs separate deletion. Downloads, browser records, hosting information, and records held by an external provider are outside that control.'],
+];
+
+export default function Privacy(){
+  const[source,setSource]=useState('Please send the project summary to alex@example.com. My number is +1 (415) 555-0198.');
+  const[result,setResult]=useState<string|null>(null);
+  return <div className="page-wrap privacy-page">
+    <PageIntro eyebrow="PRIVACY YOU CAN UNDERSTAND" title="You decide what leaves." description="Your draft starts on your device. Your context starts unselected. Every request needs your review and approval."/>
+    <div className="privacy-principles"><span><Monitor size={19}/>Local preparation</span><span><Layers3 size={19}/>Context by choice</span><span><Eye size={19}/>Approval before sending</span></div>
+    <section className="privacy-journey" aria-labelledby="privacy-journey-title"><div className="between"><h2 id="privacy-journey-title">A clear path from idea to request.</h2><a href="/workspace" className="button secondary">Open workspace</a></div><div className="privacy-steps">{steps.map(([number,title,text])=><article key={number}><span className="privacy-step-number">{number}</span><h3>{title}</h3><p>{text}</p></article>)}</div></section>
+    <div className="content-grid mt"><section className="panel"><div className="eyebrow">REMOVE THE UNNECESSARY</div><h2>Less personal detail. More intention.</h2><p className="mb">Try masking common emails and phone numbers. This tool works on your device; it does not submit your text to a model.</p><div className="field"><label htmlFor="privacy-prompt">Text to review</label><textarea id="privacy-prompt" value={source} maxLength={10000} onChange={e=>{setSource(e.target.value);setResult(null)}}/></div><div className="button-row"><button className="button primary" onClick={()=>setResult(maskIdentifiers(source))}><ScanLine/>Mask identifiers</button>{result!==null&&<button className="button secondary" onClick={()=>setResult(null)}><Undo2/>Reset</button>}</div>{result!==null&&<div className="field mt"><label htmlFor="privacy-result">Masked text · review and edit</label><textarea id="privacy-result" value={result} maxLength={10000} onChange={e=>setResult(e.target.value)}/><p className="local-result-note" role="status">Prepared locally. Nothing was sent.</p></div>}<p className="privacy-detail">Pattern masking can miss names, addresses, secrets, unusual formats, or identifying context. Remove those details yourself before sharing.</p></section>
+    <section className="panel privacy-boundary-panel"><div className="eyebrow">THE SHARING BOUNDARY</div><h2>Know who receives your words.</h2><p>Request preparation stays on your device. External AI access begins only after you choose a provider and approve a request.</p><div className="privacy-boundary-row"><span>Stays out of the request</span><strong>Unselected context, unselected history, connected wallet fields</strong></div><div className="privacy-boundary-row"><span>Included if you approve</span><strong>Your prompt and the context or history you select</strong></div><p className="privacy-detail">A connected model provider can read submitted text. Details inside that text are shared even if they identify you. Review its data-use terms before sending sensitive information.</p><a href="/workspace" className="text-link">Inspect your next request</a></section></div>
+    <section className="privacy-observers" aria-labelledby="privacy-observers-title"><div className="eyebrow">KNOW THE RECIPIENTS</div><h2 id="privacy-observers-title">Who can see what?</h2><p className="privacy-observers-intro">Local preparation and external processing have different boundaries. Here’s what each part of the journey can see.</p><DataBoundaries/><div className="privacy-observers-note"><strong>Fewer details shared. Clearer choices.</strong><p>Anonyx’s current controls minimize disclosure and require your approval. They do not establish anonymous access, provider zero retention, or confidential inference.</p><a href="/whitepaper#chapter-10" className="text-link">Read the privacy threat model</a></div></section>
+    <section className="privacy-faq" aria-labelledby="privacy-faq-title"><div className="eyebrow">CLEAR ANSWERS</div><h2 id="privacy-faq-title">Privacy, without the guesswork.</h2>{questions.map(([question,answer])=><details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</section>
+    <div className="privacy-policy-link"><div><h3>The details are yours to inspect.</h3><p>Read how storage, providers, wallets, and deletion work.</p></div><a href="/privacy-policy" className="button secondary">Read data handling policy</a></div>
+  </div>;
+}
