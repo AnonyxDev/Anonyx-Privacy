@@ -13,7 +13,7 @@
 
 **Give AI the right context. Keep the rest of your world to yourself.**
 
-Anonyx is a privacy-aware AI workspace with local prompt preparation, selective context sharing, explicit request approval, and wallet connectivity. Its product concept is based on OpenAnonymity. The current release is an interactive showcase with prepared example outputs; live inference is not enabled.
+Anonyx is a privacy-aware AI workspace with local prompt preparation, selective context sharing, explicit request approval, and wallet connectivity. Its product concept is based on OpenAnonymity. The current release has a focused chat interface, prepared example outputs and a server-side AI gateway. Live inference remains disabled until provider credentials, an approved-user allowlist and activation are configured.
 
 [Website](https://anonyx.lat) · [Workspace](https://anonyx.lat/workspace) · [Whitepaper](https://anonyx.lat/whitepaper) · [Privacy](https://anonyx.lat/privacy) · [Walkthrough](https://anonyx.lat/walkthrough) · [X](https://x.com/Anonyx_AI) · [Getting started](docs/GETTING_STARTED.md) · [Architecture](docs/ARCHITECTURE.md)
 
@@ -32,7 +32,7 @@ Anonyx is a privacy-aware AI workspace with local prompt preparation, selective 
 | Guided walkthrough | Choose a task, write a prompt, select context, approve the exact request, and explore its example result |
 | Whitepaper | Read whitepaper v2.1: abstract plus 15 chapters directly on the website |
 | Token details | Copy the published contract address; inspect the planned Pons V2 economic framework |
-| Landing experience | Interactive 3D disclosure chamber, section motion, and reduced-motion support |
+| Landing experience | Interactive disclosure chamber with a canvas path for browsers without WebGL, restrained motion, and reduced-motion support |
 
 ## Contract and community
 
@@ -54,7 +54,7 @@ Choose an example, use its suggested context or select the first two items yours
 
 Prompt preparation and context selection happen in the browser. Requests include only selected context and selected conversation turns; wallet identity is not automatically appended. Each request requires approval of the current payload snapshot.
 
-Optional saved context uses **unencrypted local browser storage**. An external model provider receives any approved text sent to it and applies its own policies. Hosting and wallet/RPC services can observe connection metadata. The interface does not establish confidential computing, provider zero retention, or anonymity against those services. Read [PRIVACY.md](docs/PRIVACY.md) for the data flow and limits.
+Optional saved context uses **unencrypted local browser storage**. An external model provider receives any approved text sent to it and applies its own policies. Hosting and wallet/RPC services can observe connection metadata. When live inference is enabled, Anonyx’s server processes approved text transiently to forward it to the provider. The interface does not establish confidential computing, provider zero retention, or anonymity against those services. Read [PRIVACY.md](docs/PRIVACY.md) for the data flow and limits.
 
 ## Run locally
 
@@ -82,7 +82,7 @@ Eight independent GitHub Actions workflows run on pushes, pull requests, and man
 | Workflow | What it verifies |
 | --- | --- |
 | [Core behavior](.github/workflows/core.yml) | Masking, payload selection, context imports and exports |
-| [Privacy review](.github/workflows/privacy.yml) | Approval, snapshot isolation, and excluded context |
+| [Privacy review](.github/workflows/privacy.yml) | Approval, snapshot isolation, excluded context, gateway access control, limits and cancellation |
 | [Wallet behavior](.github/workflows/wallet.yml) | Provider detection, switching, declined requests, and disconnection |
 | [Motion integrity](.github/workflows/motion.yml) | Disclosure boundaries, finite particle positions, and timing |
 | [Showcase outputs](.github/workflows/showcase.yml) | Exact example matching and exclusion of unrelated contact records |
@@ -96,7 +96,7 @@ The badges above link to live GitHub Actions results. Local validation and its l
 
 React 19 and TypeScript provide the interface. Vinext/Vite compile the application for a Cloudflare-compatible Worker. GSAP and React Three Fiber provide motion and 3D scenes. Wagmi and viem manage wallet connections and RPC reads.
 
-Live inference is gated behind a separately hosted HTTPS adapter and `NEXT_PUBLIC_INFERENCE_VERIFIED=true`. The included Puter adapter is integration source, not evidence of a verified production service. Keep the flag disabled until authentication, provider pinning, payload isolation, cancellation, and charging behavior have been verified end to end. See [GETTING_STARTED.md](docs/GETTING_STARTED.md).
+Live inference uses the same-origin `/api/ai` server gateway. The provider key remains in server secrets; model and provider destination are fixed by the operator. Access requires platform sign-in and an approved-user allowlist. See [AI connection setup](docs/ai-connection.md) for configuration, provider spend limits and verification. Automated provider-stub tests do not prove a live provider connection. The legacy Puter adapter is retained as standalone reference source and is not used by the chat.
 
 No token smart-contract implementation, payment execution, confidential-computing backend, or production inference service is implemented in this repository. Unavailable execution is disclosed at the point of use; no successful transaction is fabricated.
 

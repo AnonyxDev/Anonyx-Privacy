@@ -61,7 +61,7 @@ export const whitepaperChapters: WhitepaperChapter[] = [
     "blocks": [
       {
         "type": "paragraph",
-        "text": "The current release provides browser-based request preparation. A separately hosted provider adapter is included as integration source, but external inference is gated until its configuration and behavior have been verified. A configured flag alone is not proof that those checks have passed."
+        "text": "The current release provides browser-based request preparation and a same-origin, server-side AI gateway. Live inference remains disabled until an operator configures a provider secret, model, approved-user allowlist and activation flag. Automated gateway checks do not replace an authorized live-provider verification."
       },
       {
         "type": "table",
@@ -104,8 +104,8 @@ export const whitepaperChapters: WhitepaperChapter[] = [
           ],
           [
             "Live model access",
-            "Separate-origin adapter source and integration gate",
-            "Authentication, provider selection, charges, errors and end-to-end verification"
+            "Server-side gateway with secret configuration, model pinning and account allowlist",
+            "Provider configuration, spend limits and authorized live end-to-end verification"
           ],
           [
             "Confidential computing",
@@ -379,11 +379,11 @@ export const whitepaperChapters: WhitepaperChapter[] = [
     "blocks": [
       {
         "type": "paragraph",
-        "text": "The developer-facing layer is intended to provide a consistent request contract for models, selected context, sessions and usage. The present website offers request JSON validation and export; it does not provide a production Anonyx inference API, key-management service, or usage-accounting backend."
+        "text": "The developer-facing layer provides request JSON validation and export. The workspace also has a server-side gateway for an operator-configured OpenAI-compatible provider. This gated integration is not a public developer inference API, API credential service or durable usage-accounting backend."
       },
       {
         "type": "paragraph",
-        "text": "The included external adapter uses a separate HTTPS origin and validates messaging origin and window source. Its design includes request identifiers and provider/model pinning. These controls need end-to-end verification in the deployed configuration, including authentication, error handling and billing behavior."
+        "text": "The workspace gateway uses a server-held provider key and a fixed operator-configured HTTPS endpoint and model. It validates authenticated account access, same-origin requests, explicit approval and message limits, and strips unrecognized request fields. Client cancellation, timeouts and sanitized errors preserve the draft without automatic retries. The per-instance burst guard is not a durable global quota; provider spend limits and live integration verification remain required."
       },
       {
         "type": "list",
@@ -398,7 +398,7 @@ export const whitepaperChapters: WhitepaperChapter[] = [
       },
       {
         "type": "paragraph",
-        "text": "The current source includes automated tests for payload selection, review snapshot isolation, context import/export rules, wallet switching and disclosure-animation behavior. Passing these tests verifies those specific code paths; it does not prove provider non-retention, deployed confidential computing, browser-extension safety, or anonymous payment."
+        "text": "The current source includes automated tests for payload selection, review snapshot isolation, context import/export rules, wallet switching, disclosure-animation behavior and gateway authorization, validation, cancellation and sanitized failures. Provider calls in gateway tests use controlled stubs. Passing these tests does not prove real provider availability, provider non-retention, deployed confidential computing, browser-extension safety or anonymous payment."
       },
       {
         "type": "paragraph",

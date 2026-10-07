@@ -21,7 +21,8 @@
     "test:privacy": "node --experimental-strip-types --test tests/privacy-review.test.mjs",
     "test:wallet": "node --experimental-strip-types --test tests/wallet-selection.test.mjs",
     "test:motion": "node --experimental-strip-types --test tests/chamber.test.mjs",
-    "test:showcase": "node --experimental-strip-types --test tests/guided-results.test.mjs"
+    "test:showcase": "node --experimental-strip-types --test tests/guided-results.test.mjs",
+    "test:ai": "node --experimental-strip-types --test tests/ai-*.test.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

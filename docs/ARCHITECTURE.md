@@ -27,3 +27,8 @@ The whitepaper is structured in `lib/whitepaper.ts` and rendered directly by the
 `lib/project-links.ts` supplies the contract address and X URL. `ContractAddress` copies the full address and handles denied clipboard access. These links do not change inference or wallet execution.
 
 The eight routes include `/walkthrough`. Whitepaper v2.1 contains an abstract and 15 chapters; `docs/Anonyx-Whitepaper-v2.md` is its readable Markdown companion.
+
+
+## Server gateway update · 7 October 2026
+
+The chat now uses a same-origin server gateway, not the legacy external popup adapter. Approved text passes through Anonyx’s server before reaching the configured provider. Keys stay on the server; platform-authenticated accounts must be allowlisted. No prompt database or application prompt logging is added. See [AI connection setup](ai-connection.md) for activation and remaining verification.

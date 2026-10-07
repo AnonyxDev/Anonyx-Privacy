@@ -1,5 +1,3 @@
-> Historical record for earlier website builds. See [current validation](VALIDATION.md) for the updated repository package. Some behaviors described below have since been replaced.
-
 # Implementation and verification record
 
 Date: 3 October 2026. Target: this Anonyx source checkout and supervised Chromium preview. Test data was synthetic. No wallet was connected, no provider login was attempted, and no financial action occurred.

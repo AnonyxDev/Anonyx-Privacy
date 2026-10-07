@@ -1,5 +1,3 @@
-> Historical record for earlier website builds. See [current validation](VALIDATION.md) for the updated repository package. Some behaviors described below have since been replaced.
-
 # Interaction and motion revision — 3 October 2026
 
 ## Reported failure and repair

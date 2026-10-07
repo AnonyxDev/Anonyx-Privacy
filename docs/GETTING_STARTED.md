@@ -40,3 +40,8 @@ Check the resulting repository's Actions tab. All eight workflows trigger on the
 ## Update an existing repository
 
 Copy this package into the existing Anonyx checkout, preserving its `.git` directory and any unrelated repository files. Review the diff, run the validation commands, and commit the update. Do not run `gh repo create` for an existing repository. The package includes website source from release 26 and updated repository documentation and workflows.
+
+
+## Current chat connection
+
+The current chat uses the server-side gateway. Follow [AI connection setup](ai-connection.md); the separate-origin adapter instructions above are historical reference and do not enable the current workspace.

@@ -23,3 +23,8 @@ The application adds no product analytics or prompt logging. This does not imply
 Clearing a session removes local active state and prevents late responses from repopulating it. It cannot erase a provider's logs or recall an already delivered request. Context-library deletion is separate from session clearing.
 
 No confidential computing, cryptographic anonymity guarantee, independently audited backend or token settlement is implemented. Review the live [privacy page](https://anonyx.lat/privacy) and [privacy policy](https://anonyx.lat/privacy-policy).
+
+
+## Server gateway update · 7 October 2026
+
+The chat now uses a same-origin server gateway, not the legacy external popup adapter. Approved text passes through Anonyx’s server before reaching the configured provider. Keys stay on the server; platform-authenticated accounts must be allowlisted. No prompt database or application prompt logging is added. See [AI connection setup](ai-connection.md) for activation and remaining verification.

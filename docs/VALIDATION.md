@@ -22,3 +22,8 @@ The framework emits route-classification and bundle warnings. No live-provider e
 Lint is not included in these eight workflow checks. Earlier lint findings remain separate cleanup work; lint was not rerun for this source package. Browser interaction and responsive screenshots were not verified during this update.
 
 The GitHub package omits generated deployment caches, dependencies, local tool state, build output, and secret environment files. It retains the asset-retention directory and scripts so clean builds work without old cached releases.
+
+
+## Focused chat and gateway · 7 October 2026
+
+All 33 behavior tests and strict TypeScript compilation passed locally. The virtual browser exercised selected context, explicit review/approval, the unconfigured final-action notice, the matching prepared output, and the condensed homepage examples. Gateway/provider calls in automated tests use controlled stubs; no real provider API key was supplied or exercised. The production build is checked by CI.

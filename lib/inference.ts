@@ -1,9 +1,28 @@
-import {newId} from '@/lib/workspace';
 import type {RequestPayload} from './workspace';
-export type LiveModel={id:string;name:string;provider:string};
-export const ADAPTER_ORIGIN=process.env.NEXT_PUBLIC_INFERENCE_ADAPTER_ORIGIN||'';
-export const LIVE_ENABLED=process.env.NEXT_PUBLIC_INFERENCE_VERIFIED==='true'&&!!ADAPTER_ORIGIN;
-export class InferenceBridge{private popup:Window|null=null;private origin:string;constructor(){if(!LIVE_ENABLED)throw Error('External inference is not configured for this release.');this.origin=new URL(ADAPTER_ORIGIN).origin;if(this.origin===location.origin||!this.origin.startsWith('https://'))throw Error('The provider adapter must have a separate HTTPS origin.')}
-open(){this.popup=window.open(this.origin,'anonyx-inference','popup,width=520,height=650');if(!this.popup)throw Error('Allow the provider popup, then try again.');return this}
-request<T>(kind:'catalog'|'chat',payload?:RequestPayload):Promise<T>{return new Promise((resolve,reject)=>{const popup=this.popup;if(!popup||popup.closed)return reject(Error('The provider window is closed. Enable external mode again.'));const id=newId();let sent=false;const clean=()=>{clearTimeout(timer);clearInterval(ping);window.removeEventListener('message',receive)};const receive=(e:MessageEvent)=>{if(e.origin!==this.origin||e.source!==popup||!e.data||e.data.channel!=='anonyx-v1')return;if(e.data.type==='ready'&&!sent){sent=true;clearInterval(ping);popup.postMessage({channel:'anonyx-v1',id,kind,...(payload?{payload}:{})},this.origin)}if(e.data.id===id&&e.data.type==='result'){clean();if(e.data.error)reject(Error(String(e.data.error)));else resolve(e.data.result as T)}};const timer=setTimeout(()=>{clean();reject(Error('The provider did not respond. Your draft is preserved. Retry only if you want to make another request.'))},90000);const ping=setInterval(()=>popup.postMessage({channel:'anonyx-v1',type:'ping'},this.origin),500);window.addEventListener('message',receive);popup.postMessage({channel:'anonyx-v1',type:'ping'},this.origin)})}
-close(){this.popup?.close();this.popup=null}}
+export type LiveModel = {id:string; name:string; provider:string};
+export class InferenceError extends Error {
+  code?: string;
+  constructor(message:string, code?:string) {super(message); this.code=code;}
+}
+// Same-origin requests; provider credentials exist only on the server.
+export class InferenceBridge {
+  private pending = new Set<AbortController>();
+  open() {return this;}
+  async request<T>(kind:'catalog'|'chat', payload?:RequestPayload):Promise<T> {
+    const controller=new AbortController(); this.pending.add(controller);
+    const timer=setTimeout(()=>controller.abort(),40000);
+    try {
+      const response=await fetch('/api/ai', {
+        method:kind==='catalog'?'GET':'POST', credentials:'same-origin', cache:'no-store', signal:controller.signal,
+        ...(kind==='chat'?{headers:{'Content-Type':'application/json'},body:JSON.stringify({payload,approved:true})}:{}),
+      });
+      const result=await response.json() as {error?:string;code?:string;models?:LiveModel[];text?:string};
+      if(!response.ok) throw new InferenceError(result.error||'The AI request could not be completed.',result.code);
+      return (kind==='catalog'?result.models:result.text) as T;
+    } catch(error) {
+      if(error instanceof Error && error.name==='AbortError') throw new InferenceError('The request was stopped or timed out. Your draft is preserved.','aborted');
+      throw error;
+    } finally {clearTimeout(timer);this.pending.delete(controller);}
+  }
+  close() {for(const controller of this.pending)controller.abort();this.pending.clear();}
+}

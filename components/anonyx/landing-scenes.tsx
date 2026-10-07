@@ -3,15 +3,15 @@ import {useState,type CSSProperties} from 'react';
 import {Eye,Layers3,ScanLine,Code2,RotateCcw,LockKeyhole,Check} from 'lucide-react';
 
 const principles=[
- {number:'01',Icon:Eye,title:'Your identity. Your boundary.',text:'Start without a wallet. Your connected wallet address is not automatically added to AI requests.',type:'identity'},
- {number:'02',Icon:Layers3,title:'Context, on your terms.',text:'Keep what matters. Select the details each request needs, and leave the rest out.',type:'context'},
- {number:'03',Icon:ScanLine,title:'See it before you send it.',text:'Read the exact request, then approve it. Change a detail and Anonyx asks you to review again.',type:'review'},
+ {number:'01',Icon:Eye,title:'Wallet optional.',text:'Start without a wallet. Its address is not added to prompts.',type:'identity'},
+ {number:'02',Icon:Layers3,title:'Context by choice.',text:'Select useful details. Leave everything else out.',type:'context'},
+ {number:'03',Icon:ScanLine,title:'Review before sending.',text:'Inspect the exact text. Approve it when you’re ready.',type:'review'},
 ];
 export function PrincipleScenes(){return <div className="pillar-grid">{principles.map(({number,Icon,title,text,type})=><article className={'pillar motion-pillar '+type} key={type}>
  <div className="pillar-top"><span>{number} / CONTROL</span><Icon size={20}/></div>
  <div className={'principle-diagram diagram-'+type} aria-hidden="true">
  {type==='identity'?<><div className="identity-node"><LockKeyhole/><span>IDENTITY</span></div><div className="identity-wall"><i/><i/><i/></div><div className="request-node"><span>REQUEST</span><b/><b/><b/></div><div className="identity-track"><i/></div></>:type==='context'?<><div className="context-slab slab-back"><span>YOUR LIBRARY</span><i/><i/><i/></div><div className="context-slab slab-mid"><span>SELECTED CONTEXT</span><Check size={16}/></div><div className="context-slab slab-front"><span>THIS REQUEST</span><i/></div></>:<><div className="review-sheet"><span>REQUEST</span><i/><i/><i/><div className="review-scanner"/></div><div className="review-check"><Check size={19}/></div></>}
- </div><h3>{title}</h3><p>{text}</p><a href="/privacy" className="text-link">Explore privacy controls</a>
+ </div><h3>{title}</h3><p>{text}</p>
  </article>)}</div>}
 const layers=[
  {title:'Identity',short:'Your access',text:'Wallet connection is optional. Connected wallet fields are excluded from AI request text.',Icon:Eye},

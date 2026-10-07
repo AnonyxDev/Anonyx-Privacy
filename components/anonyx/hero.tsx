@@ -1,5 +1,6 @@
 'use client';
 import {Component,lazy,Suspense,useEffect,useState,useCallback,ReactNode} from 'react';
+import {ChamberCanvas} from './chamber-canvas';
 import type {ChamberProps} from './chamber-motion';
 const Scene=lazy(()=>import('./scene'));
 class SceneBoundary extends Component<{children:ReactNode;onError:()=>void},{error:boolean}>{state={error:false};static getDerivedStateFromError(){return{error:true}}componentDidCatch(){this.props.onError()}render(){return this.state.error?null:this.props.children}}
@@ -12,7 +13,7 @@ export function HeroScene(props:ChamberProps){
  const retry=()=>{setReady(false);setFailed(false);setSlow(false);setEnabled(false);setAttempt(n=>n+1)};
  return <div className="disclosure-scene" aria-busy={!ready&&!failed}>
  {!ready&&!failed&&<div className="scene-load-status" role="status">{slow?'Still loading the 3D scene…':'Loading 3D scene…'}</div>}
- {failed&&<div className="scene-load-status" role="status"><span>3D is unavailable in this browser.</span><button className="button ghost small" onClick={retry}>Retry 3D</button></div>}
+ {failed&&<div className="chamber-flat-scene" role="img" aria-label="Disclosure chamber showing selected context crossing the boundary"><ChamberCanvas {...props}/></div>}
  {enabled&&!failed&&<div className="chamber-webgl" style={{opacity:ready?1:0}} role="img" aria-label="3D disclosure chamber: approved context passes through the gate; personal identity stays on your side."><SceneBoundary key={attempt} onError={fail}><Suspense fallback={null}><Scene {...props} onReady={markReady} onError={fail}/></Suspense></SceneBoundary></div>}
  </div>;
 }
