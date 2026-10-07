@@ -90,7 +90,7 @@ Eight independent GitHub Actions workflows run on pushes, pull requests, and man
 | [Production build](.github/workflows/build.yml) | Clean production compilation and generated deployment artifacts |
 | [Repository integrity](.github/workflows/repository.yml) | Documentation links, workflow structure, whitepaper coverage, and required assets |
 
-Live status badges should be added only after this source is published to its final GitHub owner/repository and Actions has run. Local results are recorded in [VALIDATION.md](docs/VALIDATION.md).
+The badges above link to live GitHub Actions results. Local validation and its limits are recorded in [VALIDATION.md](docs/VALIDATION.md).
 
 ## Architecture and integrations
 
